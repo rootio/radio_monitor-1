@@ -1,0 +1,18 @@
+<ezstream>
+    <url>http://edgyproduct.org:8000/varvoru</url>
+    <sourcepassword>root10rulez</sourcepassword>
+    <format>MP3</format>
+    <filename>stdin</filename>
+    <stream_once>1</stream_once> 
+    
+    <svrinfoname>Radio Civic Varvoru de Jos</svrinfoname>
+    <svrinfourl>http://edgyproduct.org:8000/varvoru</svrinfourl>
+    <svrinfogenre>Community Radio</svrinfogenre>
+    <svrinfodescription>Stream from Varvoru de Jos</svrinfodescription>
+    
+    <svrinfobitrate>192</svrinfobitrate>
+    <svrinfochannels>2</svrinfochannels>
+    <svrinfosamplerate>44100</svrinfosamplerate>
+    <svrinfopublic>1</svrinfopublic>
+</ezstream>
+
