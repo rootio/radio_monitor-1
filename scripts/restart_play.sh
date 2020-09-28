@@ -1,5 +1,5 @@
 #!/bin/bash
-if ! (pgrep -f "aplay -f cd --device=plughw:1,0")
+if ! (pgrep -f "aplay -f cd --device=$1")
 then  
     sudo supervisorctl restart play_headphones
 fi 

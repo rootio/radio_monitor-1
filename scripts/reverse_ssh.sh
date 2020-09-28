@@ -1,10 +1,10 @@
 #!/bin/bash
-if [ $(pgrep -f "SCREEN -S csiksshserver") ] 
+if [ $(pgrep -f "SCREEN -S radiosshserver") ] 
 then  
-    echo "there"
+    echo "Screen session already exists"
 else  
-    echo "no there, starting"
-    screen -S csiksshserver -d -m sshpass -p pleasuretelloriginalsalmon ssh -N -R 19997:localhost:22 adriano@176.58.125.166
+    echo "Screen session non-existent, proceeding to create it"
+    screen -S radiosshserver -d -m sshpass -p $1 ssh -N -R $2:$3:$4 $5@$6
 fi
 sleep 10
 

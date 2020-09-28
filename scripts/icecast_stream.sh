@@ -1,2 +1,2 @@
 #!/bin/bash
-ncat 127.0.0.1 1234 | lame -r -b 192 - | ezstream -c $MONITOR_DIR/ezstream_stdin.xml
+ncat $1 $2 | lame -r -b $3 - | ezstream -c $4

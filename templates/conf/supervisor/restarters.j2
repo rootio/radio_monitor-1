@@ -1,0 +1,52 @@
+[program:restart_play]
+command={{ directories.installation }}/scripts/restart_play.sh {{ audio.input_device }}
+directory={{ directories.installation }}
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/restart_play.err.log
+stdout_logfile={{ directories.log }}/restart_play.out.log
+user=root
+
+[program:restart_record]
+command={{ directories.installation }}/scripts/restart_record.sh
+directory={{ directories.installation }}
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/restart_record.err.log
+stdout_logfile={{ directories.log }}/restart_record.out.log
+user=root
+
+[program:restart_save]
+command={{ directories.installation }}/scripts/restart_save.sh 
+directory={{ directories.installation }}/
+numprocs=1
+autostart=false
+exitcodes=100
+startsecs=0
+autorestart=unexpected
+startretries=999
+user=pi
+stderr_logfile={{ directories.log }}/restart_save.err.log
+stdout_logfile={{ directories.log }}/restart_save.out.log
+
+[program:restart_stream]
+command={{ directories.installation }}/scripts/restart_stream.sh
+directory={{ directories.installation }}
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/restart_stream.err.log
+stdout_logfile={{ directories.log }}/restart_stream.out.log
+user=root
+
+[program:start_all]
+command=sudo /usr/local/bin/supervisorctl start all
+directory=/usr/local/bin
+autostart=true
+autorestart=false
+startretries=10000
+stderr_logfile={{ directories.log }}/start_all.err.log
+stdout_logfile={{ directories.log }}/start_all.out.log
+user=root

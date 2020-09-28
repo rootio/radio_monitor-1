@@ -1,0 +1,88 @@
+---
+ - name: Install the radio monitor system on RASPI
+   hosts: raspis
+   become: yes
+   vars_files:
+    - vars.yml
+
+   tasks:
+    - name: Update apt sources
+      shell: apt-get update
+
+    - name: Install ncat
+      apt: 
+         name: ncat
+
+    - name: install sshpass
+      apt:
+         name: sshpass
+
+    - name: install lame
+      apt:
+         name: lame
+
+    - name: install screen
+      apt:
+         name: screen
+
+    - name: install ezstream
+      apt:
+         name: ezstream
+
+    - name: install supervisor
+      apt:
+         name: supervisor
+
+    - name: make the installation dir
+      file: 
+         path: "{{ directories.installation }}/scripts"
+         state: directory
+         recurse: yes
+         mode: 055
+
+    - name: make the log dir
+      file:
+         path: "{{ directories.log }}"
+         state: directory
+         recurse: yes
+         mode: 055
+
+    - name: make the audio recordings dir
+      file:
+         path: "{{ directories.audio_recordings }}"
+         state: directory
+         recurse: yes
+         mode: 055
+
+    - name: Copy scripts over
+      copy:
+        src: "{{ item }}"
+        dest: "{{ directories.installation }}/scripts/"
+      with_fileglob:
+        - scripts/*.sh
+
+    - name: Copy ezstream config over
+      template:
+         src: templates/conf/ezstream/ezstream_stdin.j2
+         dest: "{{ directories.installation }}/ezstream_stdin.xml"
+
+    - name: Copy radio monitor supervisor config over
+      template:
+         src: templates/conf/supervisor/radio_monitor.j2
+         dest: /etc/supervisor/conf.d/radio_monitor.conf
+
+    - name: Copy restart supervisor config over
+      template:
+         src: templates/conf/supervisor/restarters.j2
+         dest: /etc/supervisor/conf.d/restarters.conf
+
+    - name: Restart supervisor service
+      service:
+         name: supervisor
+         state: restarted
+
+    - name: Cron to restart all supervisor jobs
+      cron:
+         name: "Restart supervisor tasks"
+         minute: "0"
+         job: "supervisorctl stop all && sleep 10 && supervisorctl start all"

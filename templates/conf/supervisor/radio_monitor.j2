@@ -1,0 +1,67 @@
+[program:icecast_stream]
+command={{ directories.installation }}/scripts/icecast_stream.sh {{ streaming.local_address }} {{ streaming.local_port }} {{ audio.lame_bitrate }} {{ directories.installation }}/ezstream_stdin.xml
+directory={{ directories.installation }}/scripts
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/icecast_stream.err.log
+stdout_logfile={{ directories.log }}/icecast_stream.out.log
+user=pi
+
+[program:play_headphones]
+command={{ directories.installation }}/scripts/play_headphones.sh {{ audio.input_device }}
+directory={{ directories.installation }}/scripts
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/play_headphones.err.log
+stdout_logfile={{ directories.log }}/play_headphones.out.log
+user=root
+
+
+[program:recorder_source]
+command={{ directories.installation }}/scripts/recorder_source.sh {{ audio.input_device }} {{ streaming.local_port }}
+directory={{ directories.installation }}/scripts
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/recorder_source.err.log
+stdout_logfile={{ directories.log }}/recorder_source.out.log
+user=root
+
+[program:reverse_ssh]
+command=/usr/bin/sshpass -p {{ ssh_remote_password }} ssh -o ExitOnForwardFailure=yes -N -R {{ ssh.local_port }}:localhost:{{ ssh.remote_port }} {{ ssh_remote_username }}@{{ ssh.remote_server }}
+directory=/usr/bin
+numprocs=1
+autostart=true
+exitcodes=100
+startsecs=0
+autorestart=true
+startretries=999999
+user=pi
+stderr_logfile={{ directories.log }}/reverse_ssh.err.log
+stdout_logfile={{ directories.log }}/reverse_ssh.out.log
+
+[program:other_ssh]
+command=sshpass -p {{ ssh_remote_password }} autossh -N -M0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3"  -R {{ ssh.local_port }}:localhost:{{ ssh.remote_port }} {{ ssh_remote_username }}@{{ ssh.remote_server }}
+directory=/usr/bin
+numprocs=1
+autostart=true
+exitcodes=100
+startsecs=0
+autorestart=true
+startretries=999999
+user=pi
+stderr_logfile={{ directories.log }}/other_ssh.err.log
+stdout_logfile={{ directories.log }}/other_ssh.out.log
+
+[program:save_to_mp3]
+command={{ directories.installation }}/scripts/save_to_mp3.sh {{ streaming.local_address }} {{ streaming.local_port }} {{ audio.lame_bitrate }} {{ directories.audio_recordings }}
+directory={{ directories.installation }}/scripts
+autostart=false
+autorestart=true
+startretries=10000
+stderr_logfile={{ directories.log }}/save_to_mp3.err.log
+stdout_logfile={{ directories.log }}/save_to_mp3.out.log
+user=root
+

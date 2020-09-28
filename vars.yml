@@ -1,0 +1,30 @@
+---
+   #Conf variables for the Radio Monitor
+   directories:
+      installation: /opt/radio_monitor
+      log: /var/log/radio_monitor
+      audio_recordings: /var/audio_recordings
+
+   ssh:
+      local_port: 19999
+      remote_port: 22
+      remote_server: 176.58.125.166
+      
+   audio:
+      input_device: plughw:2,0
+      lame_bitrate: 192
+
+   streaming:
+      local_port: 1234 
+      local_address: 127.0.0.1
+      file_name: stdin
+      stream_format: MP3
+      server_info_name: "Monitor Stream"
+      server_info_url: 
+      server_info_genre: "Community Radio"
+      server_info_description: "A monitoring stream (RootIO)"
+      server_info_bitrate: 192
+      server_info_channels: 2
+      server_info_samplerate: 44100
+      server_info_public: 1 
+      
