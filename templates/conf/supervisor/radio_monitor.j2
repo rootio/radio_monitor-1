@@ -9,7 +9,7 @@ stdout_logfile={{ directories.log }}/icecast_stream.out.log
 user=pi
 
 [program:play_headphones]
-command={{ directories.installation }}/scripts/play_headphones.sh {{ audio.input_device }}
+command={{ directories.installation }}/scripts/play_headphones.sh {{ streaming.local_address }} {{ streaming.local_port }} {{ audio.output_device }}
 directory={{ directories.installation }}/scripts
 autostart=false
 autorestart=true
@@ -30,7 +30,7 @@ stdout_logfile={{ directories.log }}/recorder_source.out.log
 user=root
 
 [program:reverse_ssh]
-command=/usr/bin/sshpass -p {{ ssh_remote_password }} ssh -o ExitOnForwardFailure=yes -N -R {{ ssh.local_port }}:localhost:{{ ssh.remote_port }} {{ ssh_remote_username }}@{{ ssh.remote_server }}
+command=/usr/bin/sshpass -p {{ ssh_remote_password }} ssh -o ExitOnForwardFailure=yes -o StrictHostKeyChecking=no -N -R {{ reliable_ssh_local_port }}:localhost:{{ ssh.remote_port }} {{ ssh_remote_username }}@{{ ssh.remote_server }}
 directory=/usr/bin
 numprocs=1
 autostart=true
@@ -43,7 +43,7 @@ stderr_logfile={{ directories.log }}/reverse_ssh.err.log
 stdout_logfile={{ directories.log }}/reverse_ssh.out.log
 
 [program:other_ssh]
-command=sshpass -p {{ ssh_remote_password }} autossh -N -M0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3"  -R {{ ssh.local_port }}:localhost:{{ ssh.remote_port }} {{ ssh_remote_username }}@{{ ssh.remote_server }}
+command=sshpass -p {{ ssh_remote_password }} autossh -N -M0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -o "StrictHostKeyChecking no" -R {{ kept_alive_ssh_local_port }}:localhost:{{ ssh.remote_port }} {{ ssh_remote_username }}@{{ ssh.remote_server }}
 directory=/usr/bin
 numprocs=1
 autostart=true

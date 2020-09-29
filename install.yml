@@ -58,6 +58,7 @@
       copy:
         src: "{{ item }}"
         dest: "{{ directories.installation }}/scripts/"
+        mode: a+x
       with_fileglob:
         - scripts/*.sh
 
@@ -86,3 +87,9 @@
          name: "Restart supervisor tasks"
          minute: "0"
          job: "supervisorctl stop all && sleep 10 && supervisorctl start all"
+
+    - name: Cron to restart all supervisor jobs on reboot
+      cron:
+         name: "Restart supervisor tasks on boot"
+         special_time: reboot
+         job: "sleep 30 && supervisorctl stop all && sleep 10 && supervisorctl start all"
